@@ -1,0 +1,5 @@
+storage/*
+!storage/.gitkeep
+
+.vscode/
+*.log
