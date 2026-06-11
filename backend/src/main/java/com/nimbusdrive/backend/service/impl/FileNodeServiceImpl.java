@@ -18,6 +18,8 @@ import com.nimbusdrive.backend.dto.FileNodeResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.nio.file.DirectoryStream;
+
 import java.io.File;
 
 @Service
@@ -111,5 +113,45 @@ public class FileNodeServiceImpl implements FileNodeService {
                         fileNode.getSize()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    private void deleteRecursively(File file) {
+
+        if (file.isDirectory()) {
+
+            File[] children = file.listFiles();
+
+            if (children != null) {
+
+                for (File child : children) {
+                    deleteRecursively(child);
+                }
+
+            }
+        }
+
+        boolean deleted = file.delete();
+
+        if (!deleted) {
+            throw new RuntimeException(
+                    "Failed to delete file" + file.getAbsolutePath()
+            );
+        }
+    }
+
+    @Override
+    public void deleteFile(Long id) {
+
+        FileNode fileNode = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("File not found"));
+
+        File physicalFile = new File(fileNode.getPath());
+
+        if (physicalFile.exists()) {
+            deleteRecursively(physicalFile);
+        }
+
+        repository.deleteById(id);
     }
 }

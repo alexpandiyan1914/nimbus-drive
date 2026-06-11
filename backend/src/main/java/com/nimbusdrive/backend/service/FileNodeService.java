@@ -15,4 +15,6 @@ public interface FileNodeService {
 
     List<FileNodeResponse> getAllFiles();
 
+    void deleteFile(Long id);
+
 }

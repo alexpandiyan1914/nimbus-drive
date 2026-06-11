@@ -37,4 +37,13 @@ public class FileNodeController {
         return fileNodeService.getAllFiles();
     }
 
+    @DeleteMapping("/files/{id}")
+    public String deleteFile(
+            @PathVariable Long id) {
+
+        fileNodeService.deleteFile(id);
+
+        return "Deleted successfully";
+    }
+
 }
