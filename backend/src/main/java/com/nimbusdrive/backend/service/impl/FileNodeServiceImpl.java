@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.nimbusdrive.backend.dto.UploadResponse;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,6 +16,10 @@ import java.nio.file.Paths;
 import com.nimbusdrive.backend.dto.FileNodeResponse;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
+import java.net.MalformedURLException;
 
 import java.nio.file.DirectoryStream;
 
@@ -153,5 +156,38 @@ public class FileNodeServiceImpl implements FileNodeService {
         }
 
         repository.deleteById(id);
+    }
+
+    @Override
+    public Resource downloadFile(Long id) {
+
+        try {
+
+            FileNode fileNode = repository.findById(id)
+                    .orElseThrow(() ->
+                            new RuntimeException("File not found"));
+
+            Path filePath = Paths.get(fileNode.getPath());
+
+            Resource resource = new UrlResource(
+                    filePath.toUri()
+            );
+
+            if (!resource.exists()) {
+                throw new RuntimeException(
+                        "Physical file not found"
+                );
+            }
+
+            return resource;
+
+        } catch (MalformedURLException e) {
+
+            throw new RuntimeException(
+                    "Failed to load file",
+                    e
+            );
+
+        }
     }
 }

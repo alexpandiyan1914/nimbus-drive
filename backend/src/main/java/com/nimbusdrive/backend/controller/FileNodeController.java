@@ -9,6 +9,9 @@ import com.nimbusdrive.backend.dto.UploadResponse;
 import org.springframework.web.multipart.MultipartFile;
 import com.nimbusdrive.backend.dto.FileNodeResponse;
 import java.util.List;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api")
@@ -44,6 +47,23 @@ public class FileNodeController {
         fileNodeService.deleteFile(id);
 
         return "Deleted successfully";
+    }
+
+    @GetMapping("/files/download/{id}")
+    public ResponseEntity<Resource> downloadFile(
+            @PathVariable Long id) {
+
+        Resource resource =
+                fileNodeService.downloadFile(id);
+
+        return ResponseEntity.ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" +
+                                resource.getFilename() +
+                                "\""
+                )
+                .body(resource);
     }
 
 }

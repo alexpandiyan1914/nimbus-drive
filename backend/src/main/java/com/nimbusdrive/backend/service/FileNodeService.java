@@ -6,6 +6,7 @@ import com.nimbusdrive.backend.entity.FileNode;
 import org.springframework.web.multipart.MultipartFile;
 import com.nimbusdrive.backend.dto.FileNodeResponse;
 import java.util.List;
+import org.springframework.core.io.Resource;
 
 public interface FileNodeService {
 
@@ -16,5 +17,7 @@ public interface FileNodeService {
     List<FileNodeResponse> getAllFiles();
 
     void deleteFile(Long id);
+
+    Resource downloadFile(Long id);
 
 }
