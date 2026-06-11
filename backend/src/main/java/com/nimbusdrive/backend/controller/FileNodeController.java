@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.nimbusdrive.backend.dto.UploadResponse;
 import org.springframework.web.multipart.MultipartFile;
+import com.nimbusdrive.backend.dto.FileNodeResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -27,6 +29,12 @@ public class FileNodeController {
             @RequestParam("file") MultipartFile file) {
 
         return fileNodeService.uploadFile(file);
+    }
+
+    @GetMapping("/files")
+    public List<FileNodeResponse> getAllFiles() {
+
+        return fileNodeService.getAllFiles();
     }
 
 }

@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import com.nimbusdrive.backend.dto.FileNodeResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.io.File;
 
@@ -94,5 +97,19 @@ public class FileNodeServiceImpl implements FileNodeService {
             );
 
         }
+    }
+
+    @Override
+    public List<FileNodeResponse> getAllFiles() {
+
+        return repository.findAll()
+                .stream()
+                .map(fileNode -> new FileNodeResponse(
+                        fileNode.getId(),
+                        fileNode.getName(),
+                        fileNode.getIsFolder(),
+                        fileNode.getSize()
+                ))
+                .collect(Collectors.toList());
     }
 }
