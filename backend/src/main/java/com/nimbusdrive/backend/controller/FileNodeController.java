@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api")
@@ -35,9 +36,9 @@ public class FileNodeController {
     }
 
     @GetMapping("/files")
-    public List<FileNodeResponse> getAllFiles() {
+    public List<FileNodeResponse> getFiles(@RequestParam(required = false) Long parentId) {
 
-        return fileNodeService.getAllFiles();
+        return fileNodeService.getFiles(parentId);
     }
 
     @DeleteMapping("/files/{id}")

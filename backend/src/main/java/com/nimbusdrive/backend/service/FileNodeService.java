@@ -14,7 +14,7 @@ public interface FileNodeService {
 
     UploadResponse uploadFile(MultipartFile file);
 
-    List<FileNodeResponse> getAllFiles();
+    List<FileNodeResponse> getFiles(Long parentId);
 
     void deleteFile(Long id);
 

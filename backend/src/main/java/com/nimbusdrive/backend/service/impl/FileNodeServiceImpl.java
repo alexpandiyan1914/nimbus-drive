@@ -105,17 +105,27 @@ public class FileNodeServiceImpl implements FileNodeService {
     }
 
     @Override
-    public List<FileNodeResponse> getAllFiles() {
+    public List<FileNodeResponse> getFiles(Long parentId) {
 
-        return repository.findAll()
-                .stream()
+        List<FileNode> fileNodes;
+
+        if (parentId == null) {
+
+            fileNodes = repository.findByParentIdIsNull();
+
+        } else {
+
+            fileNodes = repository.findByParentId(parentId);
+
+        }
+
+        return fileNodes.stream()
                 .map(fileNode -> new FileNodeResponse(
                         fileNode.getId(),
                         fileNode.getName(),
                         fileNode.getIsFolder(),
-                        fileNode.getSize()
-                ))
-                .collect(Collectors.toList());
+                        fileNode.getSize()))
+                .toList();
     }
 
     private void deleteRecursively(File file) {
