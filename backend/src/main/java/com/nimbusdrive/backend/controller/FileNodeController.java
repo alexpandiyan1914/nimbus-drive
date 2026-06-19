@@ -30,9 +30,10 @@ public class FileNodeController {
 
     @PostMapping("/files/upload")
     public UploadResponse uploadFile(
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(required = false) Long parentId) {
 
-        return fileNodeService.uploadFile(file);
+        return fileNodeService.uploadFile(file, parentId);
     }
 
     @GetMapping("/files")

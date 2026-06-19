@@ -12,7 +12,7 @@ public interface FileNodeService {
 
     FileNode createFolder(CreateFolderRequest request);
 
-    UploadResponse uploadFile(MultipartFile file);
+    UploadResponse uploadFile(MultipartFile file, Long parentId);
 
     List<FileNodeResponse> getFiles(Long parentId);
 

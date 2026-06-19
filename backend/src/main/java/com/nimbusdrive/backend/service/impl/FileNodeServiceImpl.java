@@ -37,54 +37,86 @@ public class FileNodeServiceImpl implements FileNodeService {
     @Override
     public FileNode createFolder(CreateFolderRequest request) {
 
-        String folderPath = storagePath + File.separator + request.getName();
+        try {
 
-        File folder = new File(folderPath);
+            Path folderPath;
 
-        if (!folder.exists()) {
-            folder.mkdirs();
+            if (request.getParentId() == null) {
+
+                folderPath = Paths.get("../storage")
+                        .resolve(request.getName());
+
+            } else {
+
+                FileNode parentFolder = repository.findById(
+                        request.getParentId()
+                ).orElseThrow(() ->
+                        new RuntimeException("Parent folder not found"));
+
+                folderPath = Paths.get(parentFolder.getPath())
+                        .resolve(request.getName());
+            }
+
+            Files.createDirectories(folderPath);
+
+            FileNode fileNode = new FileNode();
+
+            fileNode.setName(request.getName());
+            fileNode.setPath(folderPath.toString());
+            fileNode.setMimeType(null);
+            fileNode.setSize(0L);
+            fileNode.setIsFolder(true);
+            fileNode.setParentId(request.getParentId());
+
+
+            return repository.save(fileNode);
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Failed to create folder",
+                    e
+            );
         }
-
-        FileNode fileNode = new FileNode();
-
-        fileNode.setName(request.getName());
-        fileNode.setPath(folderPath);
-        fileNode.setMimeType(null);
-        fileNode.setSize(0L);
-        fileNode.setIsFolder(true);
-        fileNode.setParentId(request.getParentId());
-
-        return repository.save(fileNode);
     }
 
     @Override
-    public UploadResponse uploadFile(MultipartFile file) {
+    public UploadResponse uploadFile(MultipartFile file, Long parentId) {
 
         try {
 
             String fileName = file.getOriginalFilename();
 
-            Path uploadPath = Paths.get(storagePath);
+            Path uploadPath;
+
+            if (parentId == null) {
+                uploadPath = Paths.get("../storage");
+            } else {
+
+                FileNode parentFolder = repository.findById(parentId)
+                        .orElseThrow(() ->
+                                new RuntimeException("Parent folder not found"));
+
+                uploadPath = Paths.get(parentFolder.getPath());
+            }
 
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            Path targetPath = uploadPath.resolve(fileName);
-
             Files.copy(
                     file.getInputStream(),
-                    targetPath
+                    uploadPath.resolve(file.getOriginalFilename())
             );
 
             FileNode fileNode = new FileNode();
 
             fileNode.setName(fileName);
-            fileNode.setPath(targetPath.toString());
+            fileNode.setPath(uploadPath.resolve(file.getOriginalFilename()).toString());
             fileNode.setMimeType(file.getContentType());
             fileNode.setSize(file.getSize());
             fileNode.setIsFolder(false);
-            fileNode.setParentId(null);
+            fileNode.setParentId(parentId);
 
             FileNode saved = repository.save(fileNode);
 
