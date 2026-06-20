@@ -3,6 +3,7 @@ package com.nimbusdrive.backend.service.impl;
 import com.nimbusdrive.backend.dto.CreateFolderRequest;
 import com.nimbusdrive.backend.dto.PreviewResponse;
 import com.nimbusdrive.backend.entity.FileNode;
+import com.nimbusdrive.backend.exception.ResourceNotFoundException;
 import com.nimbusdrive.backend.repository.FileNodeRepository;
 import com.nimbusdrive.backend.service.FileNodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class FileNodeServiceImpl implements FileNodeService {
                 FileNode parentFolder = repository.findById(
                         request.getParentId()
                 ).orElseThrow(() ->
-                        new RuntimeException("Parent folder not found"));
+                        new ResourceNotFoundException("Parent folder not found"));
 
                 folderPath = Paths.get(parentFolder.getPath())
                         .resolve(request.getName());
@@ -97,7 +98,7 @@ public class FileNodeServiceImpl implements FileNodeService {
 
                 FileNode parentFolder = repository.findById(parentId)
                         .orElseThrow(() ->
-                                new RuntimeException("Parent folder not found"));
+                                new ResourceNotFoundException("Parent folder not found"));
 
                 uploadPath = Paths.get(parentFolder.getPath());
             }
@@ -191,7 +192,7 @@ public class FileNodeServiceImpl implements FileNodeService {
 
         FileNode fileNode = repository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("File not found"));
+                        new ResourceNotFoundException("File not found"));
 
         File physicalFile = new File(fileNode.getPath());
 
@@ -209,7 +210,7 @@ public class FileNodeServiceImpl implements FileNodeService {
 
             FileNode fileNode = repository.findById(id)
                     .orElseThrow(() ->
-                            new RuntimeException("File not found"));
+                            new ResourceNotFoundException("File not found"));
 
             Path filePath = Paths.get(fileNode.getPath());
 
@@ -218,7 +219,7 @@ public class FileNodeServiceImpl implements FileNodeService {
             );
 
             if (!resource.exists()) {
-                throw new RuntimeException(
+                throw new ResourceNotFoundException(
                         "Physical file not found"
                 );
             }
@@ -254,7 +255,7 @@ public class FileNodeServiceImpl implements FileNodeService {
         try{
             FileNode fileNode = repository.findById(id)
                     .orElseThrow(()->
-                            new RuntimeException("file not found"));
+                            new ResourceNotFoundException("file not found"));
 
             Path filePath = Paths.get(fileNode.getPath());
 
@@ -263,7 +264,7 @@ public class FileNodeServiceImpl implements FileNodeService {
             );
 
             if(!resource.exists()){
-                throw new RuntimeException("physical file not found");
+                throw new ResourceNotFoundException("physical file not found");
             }
 
             return new PreviewResponse(
