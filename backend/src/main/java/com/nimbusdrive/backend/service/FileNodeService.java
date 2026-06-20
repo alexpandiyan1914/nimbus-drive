@@ -20,4 +20,6 @@ public interface FileNodeService {
 
     Resource downloadFile(Long id);
 
+    List<FileNodeResponse> searchFiles(String keyword);
+
 }

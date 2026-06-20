@@ -42,6 +42,11 @@ public class FileNodeController {
         return fileNodeService.getFiles(parentId);
     }
 
+    @GetMapping("/files/search")
+    public List<FileNodeResponse> searchFiles(@RequestParam String keyword){
+        return fileNodeService.searchFiles(keyword);
+    }
+
     @DeleteMapping("/files/{id}")
     public String deleteFile(
             @PathVariable Long id) {

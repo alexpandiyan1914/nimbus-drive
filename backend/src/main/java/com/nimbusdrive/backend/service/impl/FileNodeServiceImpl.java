@@ -232,4 +232,18 @@ public class FileNodeServiceImpl implements FileNodeService {
 
         }
     }
+
+    @Override
+    public List<FileNodeResponse> searchFiles(String keyword){
+
+        List<FileNode> fileNodes = repository.findByNameContainingIgnoreCase(keyword);
+
+        return fileNodes.stream()
+                .map(fileNode -> new FileNodeResponse(
+                        fileNode.getId(),
+                        fileNode.getName(),
+                        fileNode.getIsFolder(),
+                        fileNode.getSize()
+                )).toList();
+    }
 }

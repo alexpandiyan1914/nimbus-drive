@@ -12,4 +12,6 @@ public interface FileNodeRepository extends JpaRepository<FileNode, Long> {
 
     List<FileNode> findByParentIdIsNull();
 
+    List<FileNode> findByNameContainingIgnoreCase(String keyword);
+
 }
