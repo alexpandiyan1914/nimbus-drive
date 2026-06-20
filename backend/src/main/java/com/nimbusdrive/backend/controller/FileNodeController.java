@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import com.nimbusdrive.backend.dto.UploadResponse;
 import org.springframework.web.multipart.MultipartFile;
 import com.nimbusdrive.backend.dto.FileNodeResponse;
+import com.nimbusdrive.backend.dto.PreviewResponse;
 import java.util.List;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api")
@@ -71,6 +73,22 @@ public class FileNodeController {
                                 "\""
                 )
                 .body(resource);
+    }
+
+    @GetMapping("/files/preview/{id}")
+    public ResponseEntity<Resource> previewFile(
+            @PathVariable Long id) {
+
+        PreviewResponse response =
+                fileNodeService.previewFile(id);
+
+        return ResponseEntity.ok()
+                .contentType(
+                        MediaType.parseMediaType(
+                                response.mimeType()
+                        )
+                )
+                .body(response.resource());
     }
 
 }

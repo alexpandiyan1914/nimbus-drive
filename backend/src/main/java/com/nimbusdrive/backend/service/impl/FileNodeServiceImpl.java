@@ -1,11 +1,13 @@
 package com.nimbusdrive.backend.service.impl;
 
 import com.nimbusdrive.backend.dto.CreateFolderRequest;
+import com.nimbusdrive.backend.dto.PreviewResponse;
 import com.nimbusdrive.backend.entity.FileNode;
 import com.nimbusdrive.backend.repository.FileNodeRepository;
 import com.nimbusdrive.backend.service.FileNodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.query.PartTreeJpaQuery;
 import org.springframework.stereotype.Service;
 import com.nimbusdrive.backend.dto.UploadResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -245,5 +247,32 @@ public class FileNodeServiceImpl implements FileNodeService {
                         fileNode.getIsFolder(),
                         fileNode.getSize()
                 )).toList();
+    }
+
+    @Override
+    public PreviewResponse previewFile(Long id){
+        try{
+            FileNode fileNode = repository.findById(id)
+                    .orElseThrow(()->
+                            new RuntimeException("file not found"));
+
+            Path filePath = Paths.get(fileNode.getPath());
+
+            Resource resource = new UrlResource(
+                    filePath.toUri()
+            );
+
+            if(!resource.exists()){
+                throw new RuntimeException("physical file not found");
+            }
+
+            return new PreviewResponse(
+                    resource,
+                    fileNode.getMimeType()
+            );
+        }catch(MalformedURLException e){
+            throw new RuntimeException("failed to load", e);
+
+        }
     }
 }
