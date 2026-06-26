@@ -1,6 +1,11 @@
-function FolderRow({ name, modified }) {
+function FolderRow({
+  name,
+  modified,
+  onClick,
+}) {
   return (
     <div
+      onClick={onClick}
       className="
       grid
       grid-cols-4
