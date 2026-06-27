@@ -21,3 +21,7 @@ export const downloadFile = (id) => {
     responseType: "blob",
   });
 };
+
+export const createFolder = (data) => {
+  return api.post("/api/folders", data);
+};

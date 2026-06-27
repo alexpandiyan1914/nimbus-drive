@@ -5,30 +5,54 @@ import FileTable from "../components/file/FileTable";
 import FileRow from "../components/file/FileRow";
 import FolderRow from "../components/folder/FolderRow";
 import useFiles from "../hooks/useFiles";
+import CreateFolderModal from "../components/folder/CreateFolderModal";
+import { createFolder } from "../api/fileApi";
 
 function DrivePage() {
   const [currentFolderId, setCurrentFolderId] = useState(null);
 
-  const { files, loading } = useFiles(currentFolderId);
+  const {
+    files,
+    loading,
+    fetchFiles,
+  } = useFiles(currentFolderId);
 
   const [breadcrumbs, setBreadcrumbs] = useState([]);
 
+  const [showModal, setShowModal] = useState(false);
+
   const handleNavigate = (folderId) => {
-        setCurrentFolderId(folderId);
+    setCurrentFolderId(folderId);
 
-        if (folderId === null) {
-            setBreadcrumbs([]);
-            return;
-        }
+    if (folderId === null) {
+      setBreadcrumbs([]);
+      return;
+    }
 
-        const index =
-            breadcrumbs.findIndex(
-                (b) => b.id === folderId
-            );
+    const index =
+      breadcrumbs.findIndex(
+        (b) => b.id === folderId
+      );
 
-        setBreadcrumbs(
-            breadcrumbs.slice(0, index + 1)
-        );
+    setBreadcrumbs(
+      breadcrumbs.slice(0, index + 1)
+    );
+  };
+
+  const handleCreateFolder =
+    async (folderName) => {
+      try {
+        await createFolder({
+          name: folderName,
+          parentId: currentFolderId,
+        });
+
+        setShowModal(false);
+
+        fetchFiles();
+      } catch (error) {
+        console.error(error);
+      }
     };
 
   return (
@@ -37,7 +61,21 @@ function DrivePage() {
         breadcrumbs={breadcrumbs}
         onNavigate={handleNavigate}
       />
-      <Toolbar />
+
+      <CreateFolderModal
+        open={showModal}
+        onClose={() =>
+          setShowModal(false)
+        }
+        onCreate={handleCreateFolder}
+      />
+
+      <Toolbar
+        onNewFolder={() =>
+          setShowModal(true)
+        }
+      />
+
 
       {loading ? (
         <p className="text-slate-400">
