@@ -25,3 +25,23 @@ export const downloadFile = (id) => {
 export const createFolder = (data) => {
   return api.post("/api/folders", data);
 };
+
+export const uploadFile = (
+  file,
+  parentId
+) => {
+  const formData =
+    new FormData();
+
+  formData.append("file", file);
+
+  const url =
+    parentId === null
+      ? "/api/files/upload"
+      : `/api/files/upload?parentId=${parentId}`;
+
+  return api.post(
+    url,
+    formData
+  );
+};

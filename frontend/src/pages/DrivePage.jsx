@@ -7,15 +7,24 @@ import FolderRow from "../components/folder/FolderRow";
 import useFiles from "../hooks/useFiles";
 import CreateFolderModal from "../components/folder/CreateFolderModal";
 import { createFolder } from "../api/fileApi";
+import { useDrive } from "../context/DriveContext";
 
 function DrivePage() {
-  const [currentFolderId, setCurrentFolderId] = useState(null);
-
   const {
+    currentFolderId,
+    setCurrentFolderId,
+    refreshTrigger,
+  } = useDrive();
+
+   const {
     files,
     loading,
     fetchFiles,
-  } = useFiles(currentFolderId);
+  } = useFiles(
+    currentFolderId,
+    refreshTrigger
+  );
+
 
   const [breadcrumbs, setBreadcrumbs] = useState([]);
 
