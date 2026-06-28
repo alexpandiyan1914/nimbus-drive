@@ -8,6 +8,7 @@ import useFiles from "../hooks/useFiles";
 import CreateFolderModal from "../components/folder/CreateFolderModal";
 import { createFolder } from "../api/fileApi";
 import { useDrive } from "../context/DriveContext";
+import { deleteFile } from "../api/fileApi";
 
 function DrivePage() {
   const {
@@ -16,7 +17,7 @@ function DrivePage() {
     refreshTrigger,
   } = useDrive();
 
-   const {
+  const {
     files,
     loading,
     fetchFiles,
@@ -57,6 +58,24 @@ function DrivePage() {
         });
 
         setShowModal(false);
+
+        fetchFiles();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+  const handleDelete =
+    async (id, name) => {
+      const confirmed =
+        window.confirm(
+          `Delete "${name}" ?`
+        );
+
+      if (!confirmed) return;
+
+      try {
+        await deleteFile(id);
 
         fetchFiles();
       } catch (error) {
@@ -110,6 +129,12 @@ function DrivePage() {
                       },
                     ]);
                   }}
+                  onDelete={() =>
+                    handleDelete(
+                      item.id,
+                      item.name
+                    )
+                  }
                 />
               );
             }
@@ -121,6 +146,12 @@ function DrivePage() {
                 size={item.size}
                 type="File"
                 modified="-"
+                onDelete={() =>
+                  handleDelete(
+                    item.id,
+                    item.name
+                  )
+                }
               />
             );
           })}

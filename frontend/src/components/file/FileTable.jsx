@@ -11,7 +11,7 @@ function FileTable({ children }) {
       <div
         className="
         grid
-        grid-cols-4
+        grid-cols-5
         px-6
         py-3
         border-b
@@ -23,6 +23,9 @@ function FileTable({ children }) {
         <div>Size</div>
         <div>Type</div>
         <div>Modified</div>
+        <div className="text-right">
+          Actions
+        </div>
       </div>
 
       {children}

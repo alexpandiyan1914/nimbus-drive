@@ -1,14 +1,18 @@
+import RowActions
+  from "../common/RowActions";
+
 function FileRow({
   name,
   size,
   type,
   modified,
+  onDelete,
 }) {
   return (
     <div
       className="
       grid
-      grid-cols-4
+      grid-cols-5
       px-6
       py-4
       border-b
@@ -23,6 +27,12 @@ function FileRow({
       <div>{type}</div>
 
       <div>{modified}</div>
+
+      <div className="flex justify-end">
+        <RowActions
+          onDelete={onDelete}
+        />
+      </div>
     </div>
   );
 }
