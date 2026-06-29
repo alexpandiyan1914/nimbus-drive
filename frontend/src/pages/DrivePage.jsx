@@ -9,12 +9,15 @@ import CreateFolderModal from "../components/folder/CreateFolderModal";
 import { createFolder } from "../api/fileApi";
 import { useDrive } from "../context/DriveContext";
 import { deleteFile } from "../api/fileApi";
+import { searchFiles } from "../api/fileApi";
 
 function DrivePage() {
   const {
     currentFolderId,
     setCurrentFolderId,
     refreshTrigger,
+    searchKeyword,
+    searchResults
   } = useDrive();
 
   const {
@@ -25,6 +28,8 @@ function DrivePage() {
     currentFolderId,
     refreshTrigger
   );
+
+  const displayFiles = searchKeyword.trim() ? searchResults : files;
 
 
   const [breadcrumbs, setBreadcrumbs] = useState([]);
@@ -104,6 +109,13 @@ function DrivePage() {
         }
       />
 
+      {searchKeyword &&
+        displayFiles.length === 0 && (
+          <p className="text-slate-400">
+            No files found.
+          </p>
+        )}
+
 
       {loading ? (
         <p className="text-slate-400">
@@ -111,7 +123,7 @@ function DrivePage() {
         </p>
       ) : (
         <FileTable>
-          {files.map((item) => {
+          {displayFiles.map((item) => {
             if (item.folder) {
               return (
                 <FolderRow

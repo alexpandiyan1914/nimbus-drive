@@ -9,6 +9,12 @@ export function DriveProvider({ children }) {
   const [refreshTrigger, setRefreshTrigger] =
     useState(0);
 
+  const [searchKeyword, setSearchKeyword] =
+    useState("");
+
+  const [searchResults, setSearchResults] =
+    useState([]);
+
   const refreshFiles = () => {
     setRefreshTrigger((prev) => prev + 1);
   };
@@ -20,6 +26,10 @@ export function DriveProvider({ children }) {
         setCurrentFolderId,
         refreshTrigger,
         refreshFiles,
+        searchKeyword,
+        setSearchKeyword,
+        searchResults,
+        setSearchResults,
       }}
     >
       {children}

@@ -1,4 +1,32 @@
+import { searchFiles } from "../../api/fileApi";
+import { useDrive } from "../../context/DriveContext";
+
 function Navbar() {
+  const {
+    setSearchKeyword,
+    setSearchResults,
+  } = useDrive();
+
+  const handleSearch = async (e) => {
+    const keyword = e.target.value;
+
+    setSearchKeyword(keyword);
+
+    if (!keyword.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      const response =
+        await searchFiles(keyword);
+
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <header
       className="
@@ -19,6 +47,7 @@ function Navbar() {
       <input
         type="text"
         placeholder="Search files and folders..."
+        onChange={handleSearch}
         className="
           w-96
           bg-slate-900
