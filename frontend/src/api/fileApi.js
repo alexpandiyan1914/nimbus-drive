@@ -45,3 +45,7 @@ export const uploadFile = (
     formData
   );
 };
+
+export const getPreviewUrl = (id) => {
+  return `http://localhost:8080/api/files/preview/${id}`;
+};

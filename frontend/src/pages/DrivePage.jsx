@@ -10,6 +10,8 @@ import { createFolder } from "../api/fileApi";
 import { useDrive } from "../context/DriveContext";
 import { deleteFile } from "../api/fileApi";
 import { searchFiles } from "../api/fileApi";
+import { getPreviewUrl } from "../api/fileApi";
+import PreviewModal from "../components/file/previewModal";
 
 function DrivePage() {
   const {
@@ -31,10 +33,13 @@ function DrivePage() {
 
   const displayFiles = searchKeyword.trim() ? searchResults : files;
 
-
   const [breadcrumbs, setBreadcrumbs] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+
+  const [previewFile, setPreviewFile] = useState(null);
 
   const handleNavigate = (folderId) => {
     setCurrentFolderId(folderId);
@@ -87,6 +92,73 @@ function DrivePage() {
         console.error(error);
       }
     };
+
+  const handlePreview = (item) => {
+    const url = getPreviewUrl(item.id);
+
+    const extension = item.name
+      .split(".")
+      .pop()
+      .toLowerCase();
+
+    // Images
+    if (
+      [
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "webp",
+        "svg",
+      ].includes(extension)
+    ) {
+      setPreviewFile({
+        name: item.name,
+        content: (
+          <img
+            src={url}
+            alt={item.name}
+            className="
+            max-h-full
+            max-w-full
+            object-contain
+            rounded-lg
+            shadow-2xl
+          "
+          />
+        ),
+      });
+
+      setPreviewOpen(true);
+      return;
+    }
+
+    // PDF
+    if (extension === "pdf") {
+      setPreviewFile({
+        name: item.name,
+        content: (
+          <iframe
+            src={url}
+            title={item.name}
+            className="
+            w-full
+            h-full
+            rounded-lg
+            bg-white
+          "
+          />
+        ),
+      });
+
+      setPreviewOpen(true);
+      return;
+    }
+
+    alert(
+      "Preview is not available for this file type."
+    );
+  };
 
   return (
     <>
@@ -164,11 +236,22 @@ function DrivePage() {
                     item.name
                   )
                 }
+                onPreview={() =>
+                  handlePreview(item)
+                }
               />
             );
           })}
         </FileTable>
       )}
+
+      <PreviewModal
+        open={previewOpen}
+        onClose={() =>
+          setPreviewOpen(false)
+        }
+        file={previewFile}
+      />
     </>
   );
 }

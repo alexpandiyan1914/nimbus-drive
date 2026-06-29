@@ -7,9 +7,11 @@ function FileRow({
   type,
   modified,
   onDelete,
+  onPreview
 }) {
   return (
     <div
+      onClick={onPreview}
       className="
       grid
       grid-cols-5
