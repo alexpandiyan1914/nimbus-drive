@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 
 function RowActions({
-  onDelete,
+  onDownload,
+  onDelete
 }) {
   const [open, setOpen] =
     useState(false);
@@ -70,17 +71,34 @@ function RowActions({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onDelete();
+              onDownload?.();
               setOpen(false);
             }}
             className="
-            w-full
-            text-left
-            px-4
-            py-2
-            hover:bg-slate-800
-            text-red-400
-            "
+  w-full
+  text-left
+  px-4
+  py-2
+  hover:bg-slate-800
+  "
+          >
+            Download
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.();
+              setOpen(false);
+            }}
+            className="
+  w-full
+  text-left
+  px-4
+  py-2
+  hover:bg-slate-800
+  text-red-400
+  "
           >
             Delete
           </button>

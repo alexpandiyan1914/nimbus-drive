@@ -16,10 +16,8 @@ export const searchFiles = (keyword) => {
   return api.get(`/api/files/search?keyword=${keyword}`);
 };
 
-export const downloadFile = (id) => {
-  return api.get(`/api/files/download/${id}`, {
-    responseType: "blob",
-  });
+export const getDownloadUrl = (id) => {
+  return `http://localhost:8080/api/files/download/${id}`;
 };
 
 export const createFolder = (data) => {

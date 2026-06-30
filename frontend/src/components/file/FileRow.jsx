@@ -7,6 +7,7 @@ function FileRow({
   type,
   modified,
   onDelete,
+  onDownload,
   onPreview
 }) {
   return (
@@ -32,9 +33,12 @@ function FileRow({
 
       <div className="flex justify-end">
         <RowActions
+          onDownload={onDownload}
           onDelete={onDelete}
         />
       </div>
+
+      
     </div>
   );
 }

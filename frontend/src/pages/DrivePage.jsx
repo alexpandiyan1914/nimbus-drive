@@ -12,6 +12,7 @@ import { deleteFile } from "../api/fileApi";
 import { searchFiles } from "../api/fileApi";
 import { getPreviewUrl } from "../api/fileApi";
 import PreviewModal from "../components/file/previewModal";
+import { getDownloadUrl } from "../api/fileApi";
 
 function DrivePage() {
   const {
@@ -160,6 +161,13 @@ function DrivePage() {
     );
   };
 
+  const handleDownload = (id) => {
+    window.open(
+      getDownloadUrl(id),
+      "_blank"
+    );
+  };
+
   return (
     <>
       <Breadcrumbs
@@ -238,6 +246,9 @@ function DrivePage() {
                 }
                 onPreview={() =>
                   handlePreview(item)
+                }
+                onDownload={() =>
+                  handleDownload(item.id)
                 }
               />
             );
