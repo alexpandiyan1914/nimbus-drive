@@ -8,9 +8,11 @@ function FileTable({ children }) {
       overflow-hidden
       "
     >
+      {/* Desktop Header */}
       <div
         className="
-        grid
+        hidden
+        md:grid
         grid-cols-5
         px-6
         py-3
@@ -23,9 +25,7 @@ function FileTable({ children }) {
         <div>Size</div>
         <div>Type</div>
         <div>Modified</div>
-        <div className="text-right">
-          Actions
-        </div>
+        <div></div>
       </div>
 
       {children}

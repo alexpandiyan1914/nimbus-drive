@@ -14,31 +14,70 @@ function FileRow({
     <div
       onClick={onPreview}
       className="
-      grid
-      grid-cols-5
-      px-6
-      py-4
-      border-b
-      border-slate-900
-      hover:bg-slate-900
-      "
+  md:grid
+  md:grid-cols-5
+  border-b
+  border-slate-900
+  hover:bg-slate-900
+  cursor-pointer
+  p-4
+  md:px-6
+  md:py-4
+  "
     >
-      <div>📄 {name}</div>
+      {/* Mobile */}
+      <div className="md:hidden">
+        <div className="flex justify-between">
+          <div>
+            <div className="font-medium">
+              📄 {name}
+            </div>
 
-      <div>{size}</div>
+            <div className="text-sm text-slate-400">
+              {size}
+            </div>
 
-      <div>{type}</div>
+            <div className="text-sm text-slate-400">
+              {type}
+            </div>
+          </div>
 
-      <div>{modified}</div>
+          <RowActions
+            onDownload={onDownload}
+            onDelete={onDelete}
+          />
+        </div>
+      </div>
 
-      <div className="flex justify-end">
+      {/* Desktop */}
+      <div className="hidden md:block">
+        📄 {name}
+      </div>
+
+      <div className="hidden md:block">
+        {size}
+      </div>
+
+      <div className="hidden md:block">
+        {type}
+      </div>
+
+      <div className="hidden md:block">
+        {modified}
+      </div>
+
+      <div
+        className="
+    hidden
+    md:flex
+    justify-end
+    "
+      >
         <RowActions
           onDownload={onDownload}
           onDelete={onDelete}
         />
       </div>
-
-      
     </div>
   );
 }

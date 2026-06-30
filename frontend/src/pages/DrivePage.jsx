@@ -256,6 +256,31 @@ function DrivePage() {
         </FileTable>
       )}
 
+      <button
+        onClick={() =>
+          setShowModal(true)
+        }
+        className="
+  md:hidden
+  fixed
+  bottom-6
+  right-6
+  w-14
+  h-14
+  rounded-full
+  bg-indigo-600
+  text-3xl
+  shadow-xl
+  z-20
+  flex
+  items-center
+  justify-center
+  hover:bg-indigo-700
+  "
+      >
+        +
+      </button>
+
       <PreviewModal
         open={previewOpen}
         onClose={() =>

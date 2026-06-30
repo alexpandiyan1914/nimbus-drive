@@ -36,11 +36,11 @@ function PreviewModal({
       inset-0
       bg-black/80
       backdrop-blur-sm
-      flex
-      items-center
-      justify-center
       z-50
-      p-6
+      md:flex
+      md:items-center
+      md:justify-center
+      md:p-6
       "
       onClick={onClose}
     >
@@ -52,10 +52,11 @@ function PreviewModal({
         bg-slate-950
         border
         border-slate-800
-        rounded-2xl
         w-full
-        max-w-7xl
-        h-[90vh]
+        h-full
+        md:max-w-7xl
+        md:h-[90vh]
+        md:rounded-2xl
         overflow-hidden
         flex
         flex-col
@@ -71,14 +72,17 @@ function PreviewModal({
           flex
           items-center
           justify-between
-          px-6
+          px-4
+          md:px-6
+          shrink-0
           "
         >
           <h2
             className="
             text-white
             font-semibold
-            text-lg
+            text-base
+            md:text-lg
             truncate
             "
           >
@@ -98,7 +102,7 @@ function PreviewModal({
           </button>
         </div>
 
-        {/* Preview Area */}
+        {/* Preview */}
         <div
           className="
           flex-1
@@ -106,7 +110,8 @@ function PreviewModal({
           items-center
           justify-center
           overflow-auto
-          p-6
+          p-3
+          md:p-6
           "
         >
           {file.content}
